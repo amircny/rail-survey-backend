@@ -4,7 +4,7 @@ import requests
 import streamlit as st
 API = os.getenv("SURVEY_API", "http://localhost:8000")
 
-API = "http://127.0.0.1:8000"  # آدرس بک‌اند FastAPI شما
+# API = "http://127.0.0.1:8000"  # آدرس بک‌اند FastAPI شما
 
 st.set_page_config(page_title="Survey Admin", page_icon="🛠", layout="centered")
 st.title("🛠 Survey Admin")
