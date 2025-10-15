@@ -2,6 +2,21 @@
 import os, json, requests, streamlit as st
 from pathlib import Path
 import os
+import streamlit as st  # اگر بالاتر import کردی، همین کافیه
+
+st.set_page_config(
+    page_title="پرسشنامه سفر",
+    menu_items={"Get help": None, "Report a bug": None, "About": None}
+)
+
+st.markdown("""
+<style>
+#MainMenu {visibility:hidden;}   /* منوی سه‌نقطه */
+header {visibility:hidden;}      /* نوار بالایی و آیکون گیت‌هاب */
+footer {visibility:hidden;}      /* فوتر استریم‌لیت */
+</style>
+""", unsafe_allow_html=True)
+#.............................................................................
 API = os.getenv("SURVEY_API", "http://localhost:8000")
 
 #st.set_page_config(page_title="Project Survey", page_icon="📋", layout="centered")
