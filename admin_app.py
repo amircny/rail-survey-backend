@@ -92,20 +92,22 @@ st.subheader("Create new question")
 
 col1, col2 = st.columns([2, 1])
 with col1:
-    new_text = st.text_input("Question text", key="new_text")
+    new_text = st.text_input("Question text", key="newq_text")
 with col2:
-    new_type = st.selectbox("Type", ["single", "multi", "text", "note"], key="new_type")
+    new_type = st.selectbox(
+        "Type", ["single", "multi", "text", "note"], key="newq_type"
+    )
 
-new_order = st.number_input("Order (integer)", value=999, step=1, key="new_order")
-
-new_raw_opts = st.text_area(
-    "Options (code:Label, comma separated) • ignored for 'text'",
-    placeholder="do:Dortmund Hbf, es:Essen Hbf, du:Düsseldorf Hbf",
-    key="new_raw_opts",
+new_order = st.number_input(
+    "Order (integer)", value=999, step=1, key="newq_order"
 )
 
+new_raw_opts = st.text_area(
+    "Options (code:Label, comma separated) • ignored for 'text' / 'note'",
+    placeholder="do:Dortmund Hbf, es:Essen Hbf, du:Düsseldorf Hbf",
+    key="newq_opts",
+)
 new_options = []
-#--------------------------------------------
 # ---------- Create new question ----------
 st.subheader("Create new question")
 
