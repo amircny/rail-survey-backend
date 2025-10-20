@@ -94,7 +94,7 @@ col1, col2 = st.columns([2, 1])
 with col1:
     new_text = st.text_input("Question text", key="new_text")
 with col2:
-    new_type = st.selectbox("Type", ["single", "multi", "text"], key="new_type")
+    new_type = st.selectbox("Type", ["single", "multi", "text", "note"], key="new_type")
 
 new_order = st.number_input("Order (integer)", value=999, step=1, key="new_order")
 
@@ -116,12 +116,45 @@ if st.button("Save question"):
         res = create_question(
             {"text": new_text, "qtype": new_type, "qorder": int(new_order), "options": new_options}
         )
+       if st.button("Save question"):
+    try:
+        # 1) ساخت options بر اساس نوع
+        if new_type == "note":
+            new_options = [{
+                "image_url": (new_note_img.strip() if new_note_img else ""),
+                "caption":   (new_note_cap.strip() if new_note_cap else ""),
+                "image_width": int(new_note_w) if (new_note_w and new_note_w > 0) else None,
+            }]
+        elif new_type in ("single", "multi"):
+            new_options = []
+            raw = (new_raw_opts or "").strip()
+            if raw:
+                parts = [p.strip() for p in raw.split(",") if p.strip()]
+                for i, chunk in enumerate(parts):
+                    if ":" in chunk:
+                        code, label = chunk.split(":", 1)
+                        new_options.append({
+                            "code": code.strip(),
+                            "label": label.strip(),
+                            "oorder": i,   # اگر backend شما از ترتیب گزینه‌ها استفاده می‌کند
+                        })
+        else:  # text
+            new_options = []
+
+        # 2) ساخت payload و فراخوانی API
+        payload = {
+            "text":   new_text,
+            "qtype":  new_type,
+            "qorder": int(new_order),
+            "options": new_options,
+        }
+        res = create_question(payload)
+
         st.success(f"Saved. id={res.get('id')}")
         get_questions.clear()
+
     except Exception as e:
         st.error(f"Save failed: {e}")
-
-st.divider()
 
 
 # ---------- Existing questions ----------
