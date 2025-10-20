@@ -182,20 +182,22 @@ else:
     for q in qs:
         with st.expander(f"[{q['id']}] {q['text']}"):
             t = st.text_input("Text", value=q["text"], key=f"t_{q['id']}")
+            # نوع فعلی را بخوان (ممکن است qtype یا type باشد)
             curr_type = q.get("qtype") or q.get("type", "single")
 
-# اگر مقدار در لیست نبود، کرش نکند
-        try:
-             idx = TYPE_CHOICES.index(curr_type)
-        except ValueError:
+            # اگر مقدار در لیست نبود، کرش نکند
+            try:
+              idx = TYPE_CHOICES.index(curr_type)
+            except ValueError:
               idx = 0  # پیش‌فرض
 
-       tp = st.selectbox(
-             "Type",
-             TYPE_CHOICES,          # ["single","multi","text","note"]
-             index=idx,
+            tp = st.selectbox(
+              "Type",
+              TYPE_CHOICES,          # ["single","multi","text","note"]
+              index=idx,
               key=f"type_{q.get('id')}"
-             )
+            )
+
             ordr = st.number_input("Order", value=q.get("order", 0), step=1, key=f"ord_{q['id']}")
 
             cur = ", ".join([f"{o['code']}:{o['label']}" for o in q.get("options", [])])
