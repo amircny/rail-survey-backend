@@ -105,25 +105,45 @@ new_raw_opts = st.text_area(
 )
 
 new_options = []
-if new_type != "text" and new_raw_opts.strip():
-    for i, chunk in enumerate([x.strip() for x in new_raw_opts.split(",") if x.strip()]):
-        if ":" in chunk:
-            code, label = chunk.split(":", 1)
-            new_options.append({"code": code.strip(), "label": label.strip(), "oorder": i})
+#--------------------------------------------
+# ---------- Create new question ----------
+st.subheader("Create new question")
 
+col1, col2 = st.columns([2, 1])
+with col1:
+    new_text = st.text_input("Question text", key="new_text")
+with col2:
+    new_type = st.selectbox("Type", ["single", "multi", "text", "note"], key="new_type")
+
+new_order = st.number_input("Order (integer)", value=999, step=1, key="new_order")
+
+# فیلدهای مخصوص هر نوع
+new_raw_opts = ""
+new_note_img = ""
+new_note_cap = ""
+new_note_w   = 0
+
+if new_type in ("single", "multi"):
+    new_raw_opts = st.text_area(
+        "Options (code:Label, comma separated)",
+        placeholder="do:Dortmund Hbf, es:Essen Hbf, du:Düsseldorf Hbf",
+        key="new_raw_opts",
+    )
+elif new_type == "note":
+    st.markdown("**Note block (only UI — not stored as an answer)**")
+    new_note_img = st.text_input("Image URL (optional)", key="new_note_img")
+    new_note_cap = st.text_input("Caption (optional)", key="new_note_cap")
+    new_note_w   = st.number_input("Image width (px)", min_value=0, value=600, step=50, key="new_note_w")
+
+# ذخیره
 if st.button("Save question"):
-    try:
-        res = create_question(
-            {"text": new_text, "qtype": new_type, "qorder": int(new_order), "options": new_options}
-        )
-       if st.button("Save question"):
     try:
         # 1) ساخت options بر اساس نوع
         if new_type == "note":
             new_options = [{
-                "image_url": (new_note_img.strip() if new_note_img else ""),
-                "caption":   (new_note_cap.strip() if new_note_cap else ""),
-                "image_width": int(new_note_w) if (new_note_w and new_note_w > 0) else None,
+                "image_url":  (new_note_img.strip() if new_note_img else ""),
+                "caption":    (new_note_cap.strip() if new_note_cap else ""),
+                "image_width": int(new_note_w) if new_note_w and new_note_w > 0 else None,
             }]
         elif new_type in ("single", "multi"):
             new_options = []
@@ -136,12 +156,13 @@ if st.button("Save question"):
                         new_options.append({
                             "code": code.strip(),
                             "label": label.strip(),
-                            "oorder": i,   # اگر backend شما از ترتیب گزینه‌ها استفاده می‌کند
+                            "oorder": i,
                         })
-        else:  # text
+        else:
+            # text
             new_options = []
 
-        # 2) ساخت payload و فراخوانی API
+        # 2) فراخوانی API
         payload = {
             "text":   new_text,
             "qtype":  new_type,
@@ -149,7 +170,6 @@ if st.button("Save question"):
             "options": new_options,
         }
         res = create_question(payload)
-
         st.success(f"Saved. id={res.get('id')}")
         get_questions.clear()
 
