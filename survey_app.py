@@ -150,8 +150,30 @@ with st.form("survey_form"):
         qtype = q.get("type", "single")
         opts  = q.get("options", [])
         key_base = f"q_{qid}"
+        #---------------------------
+        # --- NOTE: فقط نمایش؛ بدون شماره و بدون پاسخ ---
+if qtype == "note":
+    meta = (opts or [{}])[0] if isinstance(opts, list) else {}
+    img_url = meta.get("image_url") or ""
+    caption = meta.get("caption") or ""
+    img_w   = meta.get("image_width") or None
+    try:
+        img_w = int(img_w) if img_w not in (None, "", 0, "0") else None
+    except:
+        img_w = None
+
+    if qtext:
+        st.markdown(f"**{qtext}**")
+    if img_url:
+        st.image(img_url, caption=caption or None, width=img_w)
+    elif caption:
+        st.caption(caption)
+
+    st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
+    continue  # برای NOTE به هدر (شماره) نمی‌رویم
 
         # --- فقط یک بار سربرگ سؤال ---
+    else:
         st.markdown(
             f"""
         <div class="question">
