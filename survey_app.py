@@ -153,36 +153,34 @@ with st.form("survey_form"):
         #---------------------------
         # --- NOTE: فقط نمایش؛ بدون شماره و بدون پاسخ ---
 if qtype == "note":
-    meta = (opts or [{}])[0] if isinstance(opts, list) else {}
-    img_url = meta.get("image_url") or ""
-    caption = meta.get("caption") or ""
-    img_w   = meta.get("image_width") or None
+    # --- رندر نوت (بدون شماره) ---
+    if qtext:
+        st.markdown(f"**{qtext}**")
+    img_url = (opts or [{}])[0].get("image_url") if isinstance(opts, list) else None
+    caption = (opts or [{}])[0].get("caption")   if isinstance(opts, list) else None
+    img_w   = (opts or [{}])[0].get("image_width") if isinstance(opts, list) else None
     try:
         img_w = int(img_w) if img_w not in (None, "", 0, "0") else None
     except:
         img_w = None
-
-    if qtext:
-        st.markdown(f"**{qtext}**")
     if img_url:
         st.image(img_url, caption=caption or None, width=img_w)
     elif caption:
         st.caption(caption)
 
     st.markdown('<div class="separator"></div>', unsafe_allow_html=True)
-    continue  # برای NOTE به هدر (شماره) نمی‌رویم
+    continue  # خیلی مهم: برو سوال بعدی
 
-        # --- فقط یک بار سربرگ سؤال ---
-    else:
-        st.markdown(
-            f"""
-        <div class="question">
-          <div class="q-index">{idx:02d}</div>
-          <div class="q-text">{qtext}</div>
-        </div>
-        """,
-            unsafe_allow_html=True,
-        )
+# 2) برای سایر سوال‌ها: هدر سوال با شماره (بدون else)
+st.markdown(
+    f"""
+    <div class="question">
+      <div class="q-index">{idx:02d}</div>
+      <div class="q-text">{qtext}</div>
+    </div>
+    """,
+    unsafe_allow_html=True,
+)
 
         # --- ویجت مطابق نوع سؤال ---
         if qtype == "single":
