@@ -100,7 +100,9 @@ def fetch_questions():
     # keep backend order by "order" then id
     data.sort(key=lambda q: (q.get("order", 0), q.get("id", 0)))
     return data
-
+def get_qtype(q: dict) -> str:
+    """Return question type from either 'qtype' or 'type' (default: 'single')."""
+    return q.get("qtype") or q.get("type") or "single"
 def submit_answers(payload: dict):
     r = requests.post(f"{API}/submit", json=payload, timeout=12)
     r.raise_for_status()
@@ -147,7 +149,7 @@ with st.form("survey_form"):
     for idx, q in enumerate(questions, start=1):
         qid   = q.get("id")
         qtext = q.get("text", "")
-        qtype = q.get("qtype") or q.get("type") or "single"
+        qtype = get_qtype(q)
         opts  = q.get("options", []) or []
         key_base = f"q_{qid}"
 
@@ -235,7 +237,7 @@ if submitted:
     # Validate (ignore "note")
     missing = []
     for q in questions:
-        qtype = q.get("qtype") or q.get("type") or "single"
+        qtype = get_qtype(q)
         if qtype == "note":
             continue
         ans = st.session_state["answers"].get(q.get("id"))
