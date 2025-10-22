@@ -89,14 +89,16 @@ def delete_question(qid: int):
 
 # ---------- Create new question ----------
 st.subheader("Create new question")
-col1, col2 = st.columns([2, 1])
-with col1:
-    new_text = st.text_input("Question text", key="new_text")
-with col2:
-    new_type = st.selectbox("Type", ["single", "multi", "text"], key="new_type")
+# Type بالا بیاید (تمام عرض)
+new_type = st.selectbox("Type", ["single", "multi", "text"], key="new_type")
 
+# سپس Question text (تمام عرض)
+new_text = st.text_input("Question text", key="new_text")
+
+# سپس Order
 new_order = st.number_input("Order (integer)", value=999, step=1, key="new_order")
 
+# سپس Options (تمام عرض)
 new_raw_opts = st.text_area(
     "Options (code:Label, comma separated) • ignored for 'text'",
     placeholder="do:Dortmund Hbf, es:Essen Hbf, du:Düsseldorf Hbf",
