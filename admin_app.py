@@ -93,7 +93,7 @@ st.subheader("Create new question")
 new_type = st.selectbox("Type", ["single", "multi", "text"], key="new_type")
 
 # سپس Question text (تمام عرض)
-new_text = st.text_input("Question text", key="new_text")
+new_text = st.text_area("Question text", key="new_text", height=120)
 
 # سپس Order
 new_order = st.number_input("Order (integer)", value=999, step=1, key="new_order")
