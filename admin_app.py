@@ -89,15 +89,6 @@ def delete_question(qid: int):
 
 # ---------- Create new question ----------
 st.subheader("Create new question")
-#..................................................................................
-# Note field (optional) + bold centered preview
-new_note = st.text_input("Note (optional) — نمایش بولد و وسط‌چین", key="new_note")
-if new_note:
-    st.markdown(
-        f"<div style='text-align:center; font-weight:700; font-size:1.05rem'>{new_note}</div>",
-        unsafe_allow_html=True
-    )
-#................................................................................
 col1, col2 = st.columns([2, 1])
 with col1:
     new_text = st.text_input("Question text", key="new_text")
