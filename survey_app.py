@@ -151,18 +151,6 @@ with st.form("survey_form"):
         opts  = q.get("options", [])
         key_base = f"q_{qid}"
 
-          # --- اگر Note وجود داشت، قبل از سؤال نشان بده ---
-        note = (q.get("note") or "").strip()
-        if note:
-            st.markdown(
-                f"""
-                <div style="text-align:center; font-weight:700; font-size:1.05rem; margin:6px 0 4px;">
-                    {note}
-                </div>
-                <div style="border-bottom:1px solid rgba(255,255,255,.2); margin:6px 0 8px;"></div>
-                """,
-                unsafe_allow_html=True,
-            )
 
         # --- فقط یک بار سربرگ سؤال ---
         st.markdown(
