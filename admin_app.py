@@ -89,7 +89,15 @@ def delete_question(qid: int):
 
 # ---------- Create new question ----------
 st.subheader("Create new question")
-
+#..................................................................................
+# Note field (optional) + bold centered preview
+new_note = st.text_input("Note (optional) — نمایش بولد و وسط‌چین", key="new_note")
+if new_note:
+    st.markdown(
+        f"<div style='text-align:center; font-weight:700; font-size:1.05rem'>{new_note}</div>",
+        unsafe_allow_html=True
+    )
+#................................................................................
 col1, col2 = st.columns([2, 1])
 with col1:
     new_text = st.text_input("Question text", key="new_text")
@@ -103,16 +111,6 @@ new_raw_opts = st.text_area(
     placeholder="do:Dortmund Hbf, es:Essen Hbf, du:Düsseldorf Hbf",
     key="new_raw_opts",
 )
-#..................................................................................
-# Note field (optional) + bold centered preview
-new_note = st.text_input("Note (optional) — نمایش بولد و وسط‌چین", key="new_note")
-if new_note:
-    st.markdown(
-        f"<div style='text-align:center; font-weight:700; font-size:1.05rem'>{new_note}</div>",
-        unsafe_allow_html=True
-    )
-#................................................................................
-
 
 new_options = []
 if new_type != "text" and new_raw_opts.strip():
