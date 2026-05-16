@@ -302,6 +302,4 @@ def export_excel_flat():
         headers={"Content-Disposition": 'attachment; filename="survey_export_flat.xlsx"'},
     )
 
-@app.get("/backup-db")
-def backup_db():
-    return FileResponse("/var/data/data.db")
+
