@@ -1,10 +1,9 @@
 # backend/main.py
 from datetime import datetime
 from typing import Any, Dict, List, Optional
-
 from fastapi import FastAPI, HTTPException
 from fastapi.middleware.cors import CORSMiddleware
-
+from fastapi.responses import FileResponse
 from io import BytesIO
 from fastapi.responses import StreamingResponse
 import openpyxl
@@ -303,3 +302,6 @@ def export_excel_flat():
         headers={"Content-Disposition": 'attachment; filename="survey_export_flat.xlsx"'},
     )
 
+@app.get("/backup-db")
+def backup_db():
+    return FileResponse("db.sqlite3")
